@@ -533,6 +533,7 @@ public class ViewStart extends JFrame {
 		scrollPane = new JScrollPane(ordertabell);
 		scrollPane.setBounds(45, 58, 443, 132);
 		skapaOrder.add(scrollPane);
+		//
 
 		scrollPane.setViewportView(ordertabell);
 		ordertabell.removeEditor();
