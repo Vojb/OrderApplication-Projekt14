@@ -1,12 +1,12 @@
-package view;
+package modell;
 
 import java.util.ArrayList;
 
-import modell.Order;
+
 
 public class OrderRegister {
 
-	private int counter = 1000;
+	private int counter = 1001;
 	ArrayList<Order> ordrar = new ArrayList<Order>();
 
 	public ArrayList<Order> getOrdrar() {
@@ -21,5 +21,13 @@ public class OrderRegister {
 		order.setOrdernr(String.valueOf(counter));
 		ordrar.add(order);
 		counter++;
+	}
+	public Order hittaOrder(String ordernr) {
+		for (Order tmp : ordrar) {
+			if (tmp.getOrdernr().equals(ordernr)) {
+				return tmp;
+			}
+		}
+		return null;
 	}
 }

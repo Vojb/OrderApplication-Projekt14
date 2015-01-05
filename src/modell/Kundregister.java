@@ -3,10 +3,8 @@ package modell;
 import java.util.ArrayList;
 
 public class Kundregister {
-
-	ArrayList<Kund> kunder = new ArrayList<Kund>();
-
-	public Kundregister() {
+	
+public Kundregister() {
 		Kund k = new Kund();
 		k.setOrgnr("1");
 		k.setForetagsnamn("Mormors Bageri");
@@ -20,6 +18,9 @@ public class Kundregister {
 		k.setFaktura("Storgatan 2");
 		kunder.add(k);
 	}
+	ArrayList<Kund> kunder = new ArrayList<Kund>();
+
+	
 
 	public void addKund(Kund k) {
 		kunder.add(k);

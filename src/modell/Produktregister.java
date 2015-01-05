@@ -4,12 +4,6 @@ import java.util.ArrayList;
 
 public class Produktregister {
 
-	ArrayList<Produkt> produkter = new ArrayList<Produkt>();
-
-	public ArrayList<Produkt> getProdukter() {
-		return produkter;
-	}
-
 	public Produktregister() {
 		Produkt p = new Produkt();
 		p.setNamn("JohannesKorv");
@@ -30,6 +24,12 @@ public class Produktregister {
 		produkter.add(p);
 		
 	}
+	ArrayList<Produkt> produkter = new ArrayList<Produkt>();
+
+	public ArrayList<Produkt> getProdukter() {
+		return produkter;
+	}
+
 
 	public void addProdukt(Produkt p) {
 		produkter.add(p);

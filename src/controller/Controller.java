@@ -2,11 +2,12 @@ package controller;
 
 import java.util.ArrayList;
 
-import view.OrderRegister;
+import javax.swing.JOptionPane;
+
 import modell.Kund;
 import modell.Kundregister;
 import modell.Order;
-import modell.Orderrad;
+import modell.OrderRegister;
 import modell.Produkt;
 import modell.Produktregister;
 
@@ -56,5 +57,12 @@ public class Controller {
 		pregister.uppdateraProdukt(kod, namn, pris, viktAntal, produktgrupp, lagerStatus, info);
 		
 	}
-	
+
+	public Order hittaOrder(String ordernr){
+		return oregister.hittaOrder(ordernr);
+	}
+	public void visaavtal() {
+		JOptionPane.showMessageDialog(null,
+				"Godkänner att Schinn & Behn får kolla kredit");
+	}
 }
