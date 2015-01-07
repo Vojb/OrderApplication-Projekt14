@@ -24,9 +24,6 @@ import javax.swing.SpinnerNumberModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
 import modell.Kund;
 import modell.Order;
 import modell.Orderrad;
@@ -70,7 +67,7 @@ public class ViewStart extends JFrame {
 	private JLabel lblNewLabel;
 	private final JButton btnHittaKund = new JButton("Sök Kund");
 	private JTabbedPane tabbedPane_1;
-	private JPanel SokOrder;
+	private JPanel Orderreg;
 	private JPanel foretagsinfo;
 	private JTextField textForetagsnamn;
 	private JTextField textKontaktperson;
@@ -144,12 +141,20 @@ public class ViewStart extends JFrame {
 	private JTextField textLeveransOrder;
 	private JTextField textLevPostOrtOrder;
 	private JLabel lblLeveransAdress;
-	private JButton btnUppdateraOrder;
+	private JButton btnUppdateraLeverans;
 	private JTextField textProduktKodOrder;
 	private JButton btnAddOrderradOrder;
 	private JButton btnTaBort_1;
-	private JTable produkttabell;
-	private JButton btnUppdateraLista;
+	private JTable produkttabellen;
+
+	private DefaultTableModel produkttabell;
+	private JScrollPane scrollProduktlistapane;
+	private JTable tblOrdershistorik;
+	private DefaultTableModel dtmOrderhistorik;
+	private JScrollPane scrollPane_Orderhistorik;
+	private JTextField textBestallare;
+	private JTextField txtBestallare;
+	private JLabel lablBestallare;
 
 	/**
 	 * Launch the application.
@@ -299,9 +304,17 @@ public class ViewStart extends JFrame {
 		btnHittaKund.setBounds(246, 41, 120, 29);
 		btnHittaKund.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				killOrderhistorik();
+				textforetagsnamn.setText(null);
+				textLeveransadress.setText(null);
+				textLevPost.setText(null);
 				letaKund();
 				leta.setText(null);
+				uppdateraOrderhistorik();
+				textOrderIdCounter.setText(null);
+
 			}
+
 		});
 
 		kundreg.add(btnHittaKund);
@@ -464,17 +477,6 @@ public class ViewStart extends JFrame {
 		JPanel skapaOrder = new JPanel();
 		tabbedPane_1.addTab("Skapa Order", null, skapaOrder, null);
 		skapaOrder.setLayout(null);
-		skapaOrder.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				// ??? // bry er ej om detta, ej fått de att fungera..
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				System.out.println("lol2");
-			}
-		});
 
 		lblProduktkod_1 = new JLabel("Produktkod");
 		lblProduktkod_1.setBounds(55, 6, 73, 16);
@@ -505,7 +507,7 @@ public class ViewStart extends JFrame {
 		JButton btnAddOrderrad = new JButton("Lägg till");
 		btnAddOrderrad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				textOrderIdCounter.setText(null);
 				Produkt p = controller.hittaProdukt(textProduktKod.getText());
 				if (p == null) {
 
@@ -535,7 +537,7 @@ public class ViewStart extends JFrame {
 
 		textforetagsnamn = new JTextField();
 		textforetagsnamn.setEditable(false);
-		textforetagsnamn.setBounds(149, 196, 134, 28);
+		textforetagsnamn.setBounds(149, 196, 155, 28);
 		skapaOrder.add(textforetagsnamn);
 		textforetagsnamn.setColumns(10);
 		textforetagsnamn.setText(textForetagsnamn.getText());
@@ -545,13 +547,13 @@ public class ViewStart extends JFrame {
 		skapaOrder.add(lblFretagsnamn);
 
 		textLeveransadress = new JTextField();
-		textLeveransadress.setBounds(149, 223, 134, 28);
+		textLeveransadress.setBounds(149, 223, 155, 28);
 		skapaOrder.add(textLeveransadress);
 		textLeveransadress.setColumns(10);
 		textLeveransadress.setText(txtFaktura.getText());
 
 		textLevPost = new JTextField();
-		textLevPost.setBounds(149, 254, 134, 28);
+		textLevPost.setBounds(149, 254, 155, 28);
 		skapaOrder.add(textLevPost);
 		textLevPost.setColumns(10);
 		textLevPost.setText(txtFakPostOrt.getText());
@@ -569,13 +571,39 @@ public class ViewStart extends JFrame {
 		JButton btnNewButton = new JButton("Slutför Order");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				Kund k = controller.hittaKund(textOrgnr.getText());
-				order.setKund(k);
-				controller.addOrder(order);
-				textOrderIdCounter.setText(order.getOrdernr());
-				k.addOrder(order);
-				JOptionPane.showMessageDialog(null, "Ordern har slutförts");
-				order = new Order();
+				if (k != null) {
+					if (!texttotalpris.getText().equals("")) {
+						if (!textBestallare.getText().equals("")) {
+							order.setKund(k);
+							order.setBestallare(textBestallare.getText());
+							order.setPris(order.totalprisorder());
+							controller.addOrder(order);
+							textOrderIdCounter.setText(order.getOrdernr());
+							k.addOrder(order);
+							JOptionPane.showMessageDialog(null,
+									"Ordern har slutförts! \n Ordernummer:"
+											+ textOrderIdCounter.getText());
+							order = new Order();
+							uppdateraOrderhistorik();
+							killOrderLista();
+
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"Ingen beställare är inskriven");
+						}
+					}
+
+					else {
+						JOptionPane.showMessageDialog(null,
+								"Inga valda produkter");
+					}
+				}
+
+				else {
+					JOptionPane.showMessageDialog(null, "Ingen kund vald");
+				}
 			}
 		});
 		btnNewButton.setBounds(453, 300, 117, 29);
@@ -583,7 +611,7 @@ public class ViewStart extends JFrame {
 
 		textOrderIdCounter = new JTextField();
 		textOrderIdCounter.setEditable(false);
-		textOrderIdCounter.setBounds(149, 284, 134, 28);
+		textOrderIdCounter.setBounds(149, 284, 155, 28);
 		skapaOrder.add(textOrderIdCounter);
 		textOrderIdCounter.setColumns(10);
 
@@ -599,6 +627,51 @@ public class ViewStart extends JFrame {
 		});
 		btnTaBort.setBounds(370, 25, 115, 29);
 		skapaOrder.add(btnTaBort);
+
+		JLabel lblBestallare = new JLabel("Beställare:");
+		lblBestallare.setBounds(358, 229, 73, 16);
+		skapaOrder.add(lblBestallare);
+
+		textBestallare = new JTextField();
+		textBestallare.setColumns(10);
+		textBestallare.setBounds(422, 223, 117, 28);
+		skapaOrder.add(textBestallare);
+
+		JPanel Orderhistorik = new JPanel();
+		tabbedPane_1.addTab("Orderhistorik", null, Orderhistorik, null);
+		Orderhistorik.setLayout(null);
+
+		dtmOrderhistorik = new DefaultTableModel();
+
+		String columOr[] = { "Ordernummer", "Datum", "Antal Produkter", "Pris",
+				"Leveransdatum" };
+		dtmOrderhistorik.setColumnIdentifiers(columOr);
+
+		tblOrdershistorik = new JTable(dtmOrderhistorik);
+
+		scrollPane_Orderhistorik = new JScrollPane(tblOrdershistorik);
+		scrollPane_Orderhistorik.setBounds(6, 6, 564, 270);
+
+		Orderhistorik.add(scrollPane_Orderhistorik);
+
+		scrollPane_Orderhistorik.setViewportView(tblOrdershistorik);
+
+		JButton btnppnaOrder = new JButton("Öppna Order");
+		btnppnaOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int valdrad = tblOrdershistorik.getSelectedRow();
+				int kundnr = 0;
+				if (valdrad != -1) {
+					kundnr = Integer.parseInt((String) tblOrdershistorik
+							.getModel().getValueAt(valdrad, 0));
+					kundnr = 0;
+					// controller.hittaOrder(0);
+				}
+				tabbedPane.setSelectedIndex(4);
+			}
+		});
+		btnppnaOrder.setBounds(453, 288, 117, 29);
+		Orderhistorik.add(btnppnaOrder);
 
 		JPanel regProdukt = new JPanel();
 		tabbedPane.addTab("Registera Produkt", null, regProdukt, null);
@@ -667,17 +740,17 @@ public class ViewStart extends JFrame {
 		regProdukt.add(lblInfo);
 
 		btnSkapaProdukt = new JButton("Skapa Produkt");
-		btnSkapaProdukt.setBounds(279, 329, 134, 29);
+		btnSkapaProdukt.setBounds(280, 268, 134, 29);
 		btnSkapaProdukt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				registeranyprodukt();
-
+				uppdateraProduktLista();
 			}
 
 		});
 
 		textInfo = new JTextField();
-		textInfo.setBounds(241, 228, 210, 96);
+		textInfo.setBounds(241, 228, 210, 28);
 		textInfo.setColumns(10);
 		regProdukt.add(textInfo);
 		regProdukt.add(btnSkapaProdukt);
@@ -770,7 +843,7 @@ public class ViewStart extends JFrame {
 		panel.add(lablOvrigInfo);
 
 		txtInfo = new JTextField();
-		txtInfo.setBounds(235, 214, 210, 70);
+		txtInfo.setBounds(235, 214, 210, 21);
 		panel.add(txtInfo);
 		txtInfo.setColumns(10);
 		panel.add(btnUppdateraProdukt);
@@ -779,51 +852,27 @@ public class ViewStart extends JFrame {
 		tabbedPane_2.addTab("Produktlista", null, produktlista, null);
 		produktlista.setLayout(null);
 
-		JScrollPane scrollProduktlistapane = new JScrollPane();
+		produkttabell = new DefaultTableModel();
+
+		String colum[] = { "Namn", "Kod", "Pris/st", "Vikt/Antal",
+				"Produktgrupp", "Lagerstatus", "Övrig information" };
+		produkttabell.setColumnIdentifiers(colum);
+
+		produkttabellen = new JTable(produkttabell);
+
+		scrollProduktlistapane = new JScrollPane(produkttabellen);
 		scrollProduktlistapane.setBounds(6, 6, 564, 232);
 		produktlista.add(scrollProduktlistapane);
 
-		JTable produkttabellen = new JTable();
-		String colum[] = { "Namn", "Kod", "Pris/st", "Vikt/Antal",
-				"Produktgrupp", "Lagerstatus", "Övrig information" };
-
-		DefaultTableModel produkttabell = new DefaultTableModel();
-		produkttabellen.setModel(produkttabell);
-		produkttabell.setColumnIdentifiers(colum);
 		scrollProduktlistapane.setViewportView(produkttabellen);
-
-		btnUppdateraLista = new JButton("Uppdatera");
-		btnUppdateraLista.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				while (produkttabell.getRowCount() > 0) { // Räknar raderna i
-															// produkttabellen,
-															// om den är större
-															// än 0
-					produkttabell.removeRow(0); // tar bort hela tabellen innan
-												// foreach loopen börjar
-				}
-				for (Produkt tmp : controller.getProdukter()) {
-					String[] row = { tmp.getNamn(), tmp.getKod(),
-							String.valueOf(tmp.getPris()), tmp.getViktAntal(),
-							tmp.getGrupp(),
-							String.valueOf(tmp.getLagerstatus()), tmp.getInfo() };
-					produkttabell.addRow(row);
-
-				}
-
-			}
-		});
-		btnUppdateraLista.setBounds(453, 250, 117, 29);
-		produktlista.add(btnUppdateraLista);
 
 		JButton btnTabortProdukt = new JButton("Ta bort");
 		btnTabortProdukt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uppdateraProduktLista();
+				taBortProdukt();
 			}
 		});
-		btnTabortProdukt.setBounds(324, 250, 117, 29);
+		btnTabortProdukt.setBounds(453, 250, 117, 29);
 		produktlista.add(btnTabortProdukt);
 
 		letaprodukt = new JTextField();
@@ -844,17 +893,17 @@ public class ViewStart extends JFrame {
 		});
 		produktregister.add(btnSökProdukt);
 
-		SokOrder = new JPanel();
-		tabbedPane.addTab("Orderregister", null, SokOrder, null);
-		SokOrder.setLayout(null);
+		Orderreg = new JPanel();
+		tabbedPane.addTab("Orderregister", null, Orderreg, null);
+		Orderreg.setLayout(null);
 
 		lblOrdernummer = new JLabel("Ordernummer: ");
 		lblOrdernummer.setBounds(138, 11, 95, 16);
-		SokOrder.add(lblOrdernummer);
+		Orderreg.add(lblOrdernummer);
 
 		textletaOrder = new JTextField();
 		textletaOrder.setBounds(231, 5, 134, 28);
-		SokOrder.add(textletaOrder);
+		Orderreg.add(textletaOrder);
 		textletaOrder.setColumns(10);
 
 		JButton btnHittaOrder = new JButton("Sök Order");
@@ -866,19 +915,19 @@ public class ViewStart extends JFrame {
 			}
 		});
 		btnHittaOrder.setBounds(246, 41, 120, 29);
-		SokOrder.add(btnHittaOrder);
+		Orderreg.add(btnHittaOrder);
 
 		JTabbedPane tabbedPane_3 = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_3.setBounds(0, 67, 597, 381);
-		SokOrder.add(tabbedPane_3);
+		Orderreg.add(tabbedPane_3);
 
 		JPanel panel_1 = new JPanel();
 		tabbedPane_3.addTab("Orderinformation", null, panel_1, null);
 		panel_1.setLayout(null);
-		
+
 		SpinnerModel smo = new SpinnerNumberModel(1, 1, 9, 1);
 
-		JSpinner antalVaraOrder = new JSpinner(smo);
+		antalVaraOrder = new JSpinner(smo);
 		antalVaraOrder.setBounds(161, 24, 61, 28);
 
 		panel_1.add(antalVaraOrder);
@@ -890,27 +939,27 @@ public class ViewStart extends JFrame {
 		scrollPane_1.setViewportView(OrderregisterTabell);
 
 		textLeveransOrder = new JTextField();
-		textLeveransOrder.setBounds(147, 227, 134, 28);
+		textLeveransOrder.setBounds(147, 227, 173, 28);
 		textLeveransOrder.setColumns(10);
 		panel_1.add(textLeveransOrder);
 
 		textLevPostOrtOrder = new JTextField();
-		textLevPostOrtOrder.setBounds(147, 260, 134, 28);
+		textLevPostOrtOrder.setBounds(147, 260, 173, 28);
 		textLevPostOrtOrder.setColumns(10);
 		panel_1.add(textLevPostOrtOrder);
 
 		textTotalPris = new JTextField();
-		textTotalPris.setBounds(422, 196, 66, 28);
+		textTotalPris.setBounds(424, 196, 66, 28);
 		textTotalPris.setEditable(false);
 		panel_1.add(textTotalPris);
 		textTotalPris.setColumns(10);
 
 		JLabel lblTotaltPris = new JLabel("Totalt pris:");
-		lblTotaltPris.setBounds(349, 202, 73, 16);
+		lblTotaltPris.setBounds(353, 202, 73, 16);
 		panel_1.add(lblTotaltPris);
 
 		textForetagsnamnOrder = new JTextField();
-		textForetagsnamnOrder.setBounds(147, 196, 134, 28);
+		textForetagsnamnOrder.setBounds(147, 196, 173, 28);
 		textForetagsnamnOrder.setEditable(false);
 		panel_1.add(textForetagsnamnOrder);
 		textForetagsnamnOrder.setColumns(10);
@@ -923,9 +972,16 @@ public class ViewStart extends JFrame {
 		lblLeveransAdress.setBounds(43, 233, 104, 16);
 		panel_1.add(lblLeveransAdress);
 
-		btnUppdateraOrder = new JButton("Uppdatera Order");
-		btnUppdateraOrder.setBounds(423, 300, 147, 29);
-		panel_1.add(btnUppdateraOrder);
+		btnUppdateraLeverans = new JButton("Uppdatera Order");
+		btnUppdateraLeverans.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			uppdateraOrderhistorik();
+				
+			}
+		});
+		btnUppdateraLeverans.setBounds(353, 300, 135, 29);
+		panel_1.add(btnUppdateraLeverans);
 
 		textProduktKodOrder = new JTextField();
 		textProduktKodOrder.setColumns(10);
@@ -962,16 +1018,59 @@ public class ViewStart extends JFrame {
 		btnTaBort_1 = new JButton("Ta bort");
 		btnTaBort_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				taBortOrderradOrder();
+				uppdateraOrderRegisterTabell();
 			}
 		});
 		btnTaBort_1.setBounds(370, 25, 120, 29);
 		panel_1.add(btnTaBort_1);
 
+		txtBestallare = new JTextField();
+		txtBestallare.setEditable(false);
+		txtBestallare.setColumns(10);
+		txtBestallare.setBounds(424, 227, 66, 28);
+		panel_1.add(txtBestallare);
+
+		lablBestallare = new JLabel("Beställare:");
+		lablBestallare.setBounds(359, 233, 73, 16);
+		panel_1.add(lablBestallare);
+		uppdateraProduktLista();
+
+	}
+
+	public void uppdateraOrderhistorik() {
+
+		dtmOrderhistorik = new DefaultTableModel();
+		String columOr[] = { "Ordernummer", "Datum", "Antal UNIKA Produkter",
+				"Pris", "Leveransdatum" };
+		dtmOrderhistorik.setColumnIdentifiers(columOr);
+
+		for (Order tmpOrder : controller.getOrdrar()) {
+			if (tmpOrder.getKund().getOrgnr().equals(textOrgnr.getText())) {
+
+				String[] row = { tmpOrder.getOrdernr(), "2015-01-15 ",
+						String.valueOf(tmpOrder.getOrderrader().size()),
+						String.valueOf(tmpOrder.getPris()), "2015-01-21" };
+				dtmOrderhistorik.addRow(row);
+			}
+		}
+		tblOrdershistorik.setModel(dtmOrderhistorik);
+
+	}
+
+	private void killOrderLista() {
+		tablemodel.setRowCount(0);
+
+	}
+
+	private void killOrderhistorik() {
+		dtmOrderhistorik.setRowCount(0);
+
 	}
 
 	public void taBortProdukt() {
-		if (produkttabell.getSelectedRow() >= 0) {
-			controller.getProdukter().remove(produkttabell.getSelectedRow());
+		if (produkttabellen.getSelectedRow() >= 0) {
+			controller.getProdukter().remove(produkttabellen.getSelectedRow());
 			uppdateraProduktLista();
 		}
 	}
@@ -989,10 +1088,27 @@ public class ViewStart extends JFrame {
 	public void taBortOrderradOrder() {
 
 		for (Order tmp : controller.getOrdrar()) {
-			if (OrderregisterTabell.getSelectedRow() >= 0) {
+
+			if (tmp.getOrdernr().equals(textletaOrder.getText())) {
+				if (OrderregisterTabell.getSelectedRow() >= 0) {
+					tmp.getOrderrader().remove(
+							OrderregisterTabell.getSelectedRow());
+
+					uppdateraOrderRegisterTabell();
+				}
 			}
-			tmp.getOrderrader().remove(OrderregisterTabell.getSelectedRow());
-			uppdateraOrderRegisterTabell();
+		}
+	}
+
+	public int checkNumber(String input) {
+		try {
+			// försök göra detta
+			int a = Integer.parseInt(input);
+			return a;
+		} catch (NumberFormatException e) {
+			// går det åt helvete, gör detta
+			JOptionPane.showMessageDialog(null, "Felmeddelande");
+			return 0;
 		}
 	}
 
@@ -1011,7 +1127,7 @@ public class ViewStart extends JFrame {
 					tmpProdukt.getInfo() };
 			tablemodel.addRow(row);
 		}
-		produkttabell.setModel(tablemodel);
+		produkttabellen.setModel(tablemodel);
 
 	}
 
@@ -1044,22 +1160,25 @@ public class ViewStart extends JFrame {
 		String col[] = { "Namn", "Antal", "Pris/st", "Pris" };
 		tablemodel.setColumnIdentifiers(col);
 		for (Order tmp : controller.getOrdrar()) {
-			for (Orderrad tmporderrad : tmp.getOrderrader()) {
-				String[] row = { tmporderrad.getProdukt().getNamn(),
-						String.valueOf(tmporderrad.getAntal()),
-						String.valueOf(tmporderrad.getProdukt().getPris()),
-						String.valueOf(tmporderrad.kalktotpris()) };
-				tablemodel.addRow(row);
+			if (tmp.getOrdernr().equals(textletaOrder.getText())) {
+
+				for (Orderrad tmporderrad : tmp.getOrderrader()) {
+					String[] row = { tmporderrad.getProdukt().getNamn(),
+							String.valueOf(tmporderrad.getAntal()),
+							String.valueOf(tmporderrad.getProdukt().getPris()),
+							String.valueOf(tmporderrad.kalktotpris()) };
+					tablemodel.addRow(row);
+				}
+
+				OrderregisterTabell.setModel(tablemodel);
+				double totpris = 0;
+				for (Orderrad or2 : tmp.getOrderrader()) {
+					totpris += or2.kalktotpris();
+
+					textTotalPris.setText(String.valueOf(totpris));
+				}
+
 			}
-
-			OrderregisterTabell.setModel(tablemodel);
-			double totpris = 0;
-			for (Orderrad or2 : tmp.getOrderrader()) {
-				totpris += or2.kalktotpris();
-
-				textTotalPris.setText(String.valueOf(totpris));
-			}
-
 		}
 	}
 
@@ -1088,33 +1207,30 @@ public class ViewStart extends JFrame {
 	}
 
 	public void addOrderradOrder() {
-		System.out.print(antalVaraOrder);
 		Produkt p = controller.hittaProdukt(textProduktKodOrder.getText());
 		boolean exists = false;
 		if (p != null) {
 			for (Order tmp : controller.getOrdrar()) {
-				for (Orderrad or1 : tmp.getOrderrader()) {
+				if (tmp.getOrdernr().equals(textletaOrder.getText())) {
+					for (Orderrad or1 : tmp.getOrderrader()) {
 
-					if (or1.getProdukt().getKod().equals(p.getKod())) {
-						or1.setAntal((or1.getAntal() + (Integer) antalVaraOrder
-								.getValue()));
-						exists = true;
-						System.out.print(or1.getAntal());
+						if (or1.getProdukt().getKod().equals(p.getKod())) {
+							or1.setAntal((or1.getAntal() + (Integer) antalVaraOrder
+									.getValue()));
+							exists = true;
+						}
+					}
+
+					if (!exists) {
+						Orderrad or = new Orderrad();
+						or.setProdukt(p);
+						or.setAntal((Integer) antalVaraOrder.getValue());
+						or.setOrder(tmp);
+						tmp.addOrderrad(or);
 					}
 				}
-
-				if (!exists) {
-					Orderrad or = new Orderrad();
-					or.setProdukt(p);
-					or.setAntal((Integer) antalVaraOrder.getValue());
-					or.setOrder(tmp);
-					tmp.addOrderrad(or);
-
-				}
-
 			}
 		}
-
 		uppdateraOrderRegisterTabell();
 	}
 
@@ -1167,13 +1283,11 @@ public class ViewStart extends JFrame {
 							"Kunden måste vara kreditvärdig!");
 				}
 			} else {
-				JOptionPane.showMessageDialog(this,
-						"faaaaaaaaan också!! fält tomma");
+				JOptionPane.showMessageDialog(this, "Vissa fält är tomma.");
 			}
 		} else {
-			JOptionPane.showMessageDialog(this,
-
-			"Kund finner du redan i listan till tegners");
+			JOptionPane
+					.showMessageDialog(this, "Kund finns redan i registeret");
 		}
 	}
 
@@ -1258,7 +1372,7 @@ public class ViewStart extends JFrame {
 							.getForetagsnamn());
 					textLeveransOrder.setText(tmp.getKund().getFaktura());
 					textLevPostOrtOrder.setText(tmp.getKund().getFakPostOrt());
-
+					txtBestallare.setText(tmp.getBestallare());
 				}
 			}
 		}

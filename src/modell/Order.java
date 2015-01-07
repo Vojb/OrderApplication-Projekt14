@@ -11,7 +11,7 @@ private Kund kund;
 private String leverans;
 private String levPostOrt;
 private double pris=0;
-
+private String bestallare;
 
 public String getLeverans() {
 	return leverans;
@@ -54,17 +54,25 @@ public Kund getKund() {
 public void setKund(Kund kund) {
 	this.kund = kund;
 }
-public void totalprisorder(){
+
+public double totalprisorder(){
 	
 	for(Orderrad o : orderrader){
-		setPris(getPris() + o.kalktotpris());
+		pris += o.kalktotpris();
 	}
- 
+	return pris;
 }
 public double getPris() {
+	
 	return pris;
 }
 public void setPris(double pris) {
 	this.pris = pris;
+}
+public String getBestallare() {
+	return bestallare;
+}
+public void setBestallare(String bestallare) {
+	this.bestallare = bestallare;
 }
 }

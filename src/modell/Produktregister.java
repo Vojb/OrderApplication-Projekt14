@@ -6,21 +6,30 @@ public class Produktregister {
 
 	public Produktregister() {
 		Produkt p = new Produkt();
-		p.setNamn("JohannesKorv");
-		p.setPris(130);
-		p.setKod("13");
+		p.setNamn("Vitlökskorv");
+		p.setPris(80);
+		p.setKod("1");
 		p.setGrupp("Korv");
-		p.setLagerstatus(10);
-		p.setViktAntal("10");
+		p.setLagerstatus(200);
+		p.setViktAntal("10 st");
 	
 		produkter.add(p);
 		p = new Produkt();
-		p.setNamn("EmmasFileer");
-		p.setPris(100);
-		p.setKod("7");
-		p.setGrupp("Kyckling");
-		p.setLagerstatus(10);
-		p.setViktAntal("10");
+		p.setNamn("Fläskkorv");
+		p.setPris(90);
+		p.setKod("2");
+		p.setGrupp("Korv");
+		p.setLagerstatus(200);
+		p.setViktAntal("10 st");
+		produkter.add(p);
+		
+		p = new Produkt();
+		p.setNamn("Julskinka");
+		p.setPris(200);
+		p.setKod("3");
+		p.setGrupp("Skinka");
+		p.setLagerstatus(200);
+		p.setViktAntal("500 g");
 		produkter.add(p);
 		
 	}

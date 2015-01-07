@@ -7,20 +7,19 @@ public class Kundregister {
 public Kundregister() {
 		Kund k = new Kund();
 		k.setOrgnr("1");
-		k.setForetagsnamn("Mormors Bageri");
-		k.setFakPostOrt("Lund");
+		k.setForetagsnamn("AB Norrby Mat och Frukt");
+		k.setFakPostOrt("Norrby");
 		k.setFaktura("Lillgatan 3");
 		kunder.add(k);
 		k = new Kund();
 		k.setOrgnr("2");
-		k.setForetagsnamn("Farfars Bageri");
-		k.setFakPostOrt("Lund");
+		k.setForetagsnamn("Ikea Restauranger AB ");
+		k.setFakPostOrt("Malmö");
 		k.setFaktura("Storgatan 2");
 		kunder.add(k);
 	}
-	ArrayList<Kund> kunder = new ArrayList<Kund>();
 
-	
+	ArrayList<Kund> kunder = new ArrayList<Kund>();
 
 	public void addKund(Kund k) {
 		kunder.add(k);

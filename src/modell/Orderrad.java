@@ -5,6 +5,8 @@ public class Orderrad {
 private int antal;
 private Order order;
 private double pris;
+private Produkt produkt;
+
 public double getPris() {
 	return pris;
 }
@@ -12,8 +14,6 @@ public double getPris() {
 public void setPris(double pris) {
 	this.pris = pris;
 }
-private Produkt produkt;
-
 
 public int getAntal() {
 	return antal;
