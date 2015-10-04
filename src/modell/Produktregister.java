@@ -13,7 +13,7 @@ public class Produktregister {
 		p.setLagerstatus(200);
 		p.setViktAntal("10 st");
 	
-		produkter.add(p);
+		produkt.add(p);
 		p = new Produkt();
 		p.setNamn("Fläskkorv");
 		p.setPris(90);
@@ -21,7 +21,7 @@ public class Produktregister {
 		p.setGrupp("Korv");
 		p.setLagerstatus(200);
 		p.setViktAntal("10 st");
-		produkter.add(p);
+		produkt.add(p);
 		
 		p = new Produkt();
 		p.setNamn("Julskinka");
@@ -30,28 +30,26 @@ public class Produktregister {
 		p.setGrupp("Skinka");
 		p.setLagerstatus(200);
 		p.setViktAntal("500 g");
-		produkter.add(p);
+		produkt.add(p);
 		
 	}
-	ArrayList<Produkt> produkter = new ArrayList<Produkt>();
+	ArrayList<Produkt> produkt = new ArrayList<Produkt>();
 
 	public ArrayList<Produkt> getProdukter() {
-		return produkter;
+		return produkt;
 	}
 
 
 	public void addProdukt(Produkt p) {
-		produkter.add(p);
+		produkt.add(p);
 	}
 
 	public void setProdukter(ArrayList<Produkt> produkter) {
-		this.produkter = produkter;
+		this.produkt = produkter;
 	}
 
-	public void nyProdukt(String kod, String namn, int pris, String viktAntal,
-			String produktgrupp, int lagerStatus, String ovrigInfo) {
+	public void nyProdukt(String kod, String namn, int pris, String viktAntal, String produktgrupp, int lagerStatus, String ovrigInfo) {
 		Produkt p = new Produkt();
-
 		p.setNamn(namn);
 		p.setKod(kod);
 		p.setPris(pris);
@@ -59,12 +57,11 @@ public class Produktregister {
 		p.setLagerstatus(lagerStatus);
 		p.setInfo(ovrigInfo);
 		p.setGrupp(produktgrupp);
-		produkter.add(p);
-
+		produkt.add(p);
 	}
 
 	public Produkt hittaProdukt(String kod) {
-		for (Produkt tmp : produkter) {
+		for (Produkt tmp : produkt) {
 			if (tmp.getKod().equals(kod)) {
 				return tmp;
 			}
@@ -72,11 +69,8 @@ public class Produktregister {
 		return null;
 	}
 
-	public void uppdateraProdukt(String kod, String namn, int pris,
-			String viktAntal, String produktgrupp, int lagerStatus, String info) {
-
+	public void uppdateraProdukt(String kod, String namn, int pris, String viktAntal, String produktgrupp, int lagerStatus, String info) {
 		Produkt p = hittaProdukt(kod);
-
 		if (p.getKod().equals(kod)) {
 			p.setNamn(namn);
 			p.setPris(pris);
@@ -84,8 +78,6 @@ public class Produktregister {
 			p.setGrupp(produktgrupp);
 			p.setLagerstatus(lagerStatus);
 			p.setInfo(info);
-
 		}
 	}
-
 }

@@ -10,33 +10,32 @@ public Kundregister() {
 		k.setForetagsnamn("AB Norrby Mat och Frukt");
 		k.setFakPostOrt("Norrby");
 		k.setFaktura("Lillgatan 3");
-		kunder.add(k);
+		kund.add(k);
+		
 		k = new Kund();
 		k.setOrgnr("2");
 		k.setForetagsnamn("Ikea Restauranger AB ");
 		k.setFakPostOrt("Malmö");
 		k.setFaktura("Storgatan 2");
-		kunder.add(k);
+		kund.add(k);
 	}
 
-	ArrayList<Kund> kunder = new ArrayList<Kund>();
+	ArrayList<Kund> kund = new ArrayList<Kund>();
 
 	public void addKund(Kund k) {
-		kunder.add(k);
+		kund.add(k);
 	}
 
 	public ArrayList<Kund> getKunder() {
-		return kunder;
+		return kund;
 	}
 
 	public void setKunder(ArrayList<Kund> kunder) {
-		this.kunder = kunder;
+		this.kund = kunder;
 	}
 
-	public void nyKund(String orgnr, String foretagsnamn, String faktura,
-			String fakPostOrt, String kontaktperson, String mail, String telenr) {
+	public void nyKund(String orgnr, String foretagsnamn, String faktura, String fakPostOrt, String kontaktperson, String mail, String telenr) {
 		Kund k = new Kund();
-
 		k.setForetagsnamn(foretagsnamn);
 		k.setOrgnr(orgnr);
 		k.setFaktura(faktura);
@@ -44,11 +43,11 @@ public Kundregister() {
 		k.setKontaktperson(kontaktperson);
 		k.setMail(mail);
 		k.setTelenr(telenr);
-		kunder.add(k);
+		kund.add(k);
 	}
 
 	public Kund hittaKund(String orgnr) {
-		for (Kund tmp : kunder) {
+		for (Kund tmp : kund) {
 			if (tmp.getOrgnr().equals(orgnr)) {
 				return tmp;
 			}
@@ -57,19 +56,12 @@ public Kundregister() {
 	}
 
 	public void uppdateraKund(String orgnr,String foretagsnamn, String faktura,String fakPostOrt, String kontaktperson, String mail, String telenr) {
-
-	
 		Kund k = hittaKund(orgnr);	
-				k.setForetagsnamn(foretagsnamn);
-				k.setFaktura(faktura);
-				k.setFakPostOrt(fakPostOrt);
-				k.setKontaktperson(kontaktperson);
-				k.setMail(mail);
-				k.setTelenr(telenr);
-				
-
-		}		
-		
-	
-
+			k.setForetagsnamn(foretagsnamn);
+			k.setFaktura(faktura);
+			k.setFakPostOrt(fakPostOrt);
+			k.setKontaktperson(kontaktperson);
+			k.setMail(mail);
+			k.setTelenr(telenr);
+	}		
 }

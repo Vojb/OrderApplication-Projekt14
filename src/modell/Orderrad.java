@@ -4,15 +4,15 @@ package modell;
 public class Orderrad {
 private int antal;
 private Order order;
-private double pris;
+private double orderPris;
 private Produkt produkt;
 
 public double getPris() {
-	return pris;
+	return orderPris;
 }
 
 public void setPris(double pris) {
-	this.pris = pris;
+	this.orderPris = pris;
 }
 
 public int getAntal() {
@@ -38,7 +38,7 @@ public Produkt getProdukt() {
 public void setProdukt(Produkt produkt) {
 	this.produkt = produkt;
 }
-public double kalktotpris(){
+public double kalkTotPris(){
 		return produkt.getPris()*antal;
 }
 

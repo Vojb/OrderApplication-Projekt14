@@ -3,16 +3,17 @@ package modell;
 import java.util.ArrayList;
 
 
-
 public class Produkt {
 	
-private int pris;
+private double pris;
 private String produktkod;
-private String namn;
+private String produktNamn; 
 private String info;
 private String viktAntal;
-private String grupp;
+private String produktgrupp;
 private int lagerstatus;
+
+ArrayList<Orderrad> orderrader =new ArrayList<Orderrad>();
 
 public String getInfo() {
 	return info;
@@ -23,16 +24,12 @@ public void setInfo(String info) {
 }
 
 public String getGrupp() {
-	return grupp;
+	return produktgrupp;
 }
 
 public void setGrupp(String grupp) {
-	this.grupp = grupp;
+	this.produktgrupp = grupp;
 }
-
-
-
-ArrayList<Orderrad> orderrader =new ArrayList<Orderrad>();
 
 public void addOrderrad(Orderrad a){
 	orderrader.add(a);
@@ -41,26 +38,33 @@ public void addOrderrad(Orderrad a){
 public ArrayList<Orderrad>  getOrderrader() {
 	return orderrader;
 }
+
 public void setOrderrader(ArrayList<Orderrad> orderrader) {
 	this.orderrader = orderrader;
 }
-public int getPris() {
+
+public double getPris() {
 	return pris;
 }
-public void setPris(int pris) {
+
+public void setPris(double pris) {
 	this.pris = pris;
 }
+
 public String getKod() {
 	return produktkod;
 }
+
 public void setKod(String kod) {
 	this.produktkod = kod;
 }
+
 public String getNamn() {
-	return namn;
+	return produktNamn;
 }
+
 public void setNamn(String namn) {
-	this.namn = namn;
+	this.produktNamn = namn;
 }
 
 public int getLagerstatus() {
@@ -70,6 +74,7 @@ public int getLagerstatus() {
 public void setLagerstatus(int lagerstatus) {
 	this.lagerstatus = lagerstatus;
 }
+
 public String getViktAntal() {
 	return viktAntal;
 }
@@ -77,5 +82,4 @@ public String getViktAntal() {
 public void setViktAntal(String viktAntal) {
 	this.viktAntal = viktAntal;
 }
-
 }

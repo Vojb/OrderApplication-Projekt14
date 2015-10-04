@@ -6,45 +6,69 @@ import java.util.ArrayList;
 
 public class Order {
 
-private String ordernr;
+
+private String ordernummer;
 private Kund kund;
-private String leverans;
-private String levPostOrt;
-private double pris=0;
+private String leveransadress;
+private String leveransadressPostOrt;
+private double totPris = 0;
 private String bestallare;
+private String bestDatum; 
+private String leveransdatum; 
+
+ArrayList<Orderrad> orderrad=new ArrayList<Orderrad>();
+
+public String getBestDatum() {
+	return bestDatum;
+}
+
+public void setBestDatum(String bestDatum) {
+	this.bestDatum = bestDatum;
+}
+
+public String getLeveransdatum() {
+	return leveransdatum;
+}
+
+public void setLeveransdatum(String leveransdatum) {
+	this.leveransdatum = leveransdatum;
+}
+
 
 public String getLeverans() {
-	return leverans;
+	return leveransadress;
 }
+
 public void setLeverans(String leverans) {
-	this.leverans = leverans;
+	this.leveransadress = leverans;
 }
+
 public String getLevPostOrt() {
-	return levPostOrt;
+	return leveransadressPostOrt;
 }
+
 public void setLevPostOrt(String levPostOrt) {
-	this.levPostOrt = levPostOrt;
+	this.leveransadressPostOrt = levPostOrt;
 }
 
-ArrayList<Orderrad> orderrader=new ArrayList<Orderrad>();
-
-public void addOrderrad(Orderrad a){
-	orderrader.add(a);
+public void addOrderrad(Orderrad or){
+	orderrad.add(or);
 }
+
 public ArrayList<Orderrad> getOrderrader() {
-	return orderrader;
+	return orderrad;
 }
 
 public void setOrderrader(ArrayList<Orderrad> orderrader) {
-	this.orderrader = orderrader;
+	this.orderrad = orderrader;
 }
 
 public String getOrdernr() {
-	return ordernr;
+	return ordernummer;
 }
 
 public void setOrdernr(String ordernr) {
-	this.ordernr = ordernr;
+	this.ordernummer = ordernr;
 }
 
 public Kund getKund() {
@@ -55,23 +79,26 @@ public void setKund(Kund kund) {
 	this.kund = kund;
 }
 
-public double totalprisorder(){
-	
-	for(Orderrad o : orderrader){
-		pris += o.kalktotpris();
+public double kalkTotOrderPris() {
+	for(Orderrad o : orderrad) {
+		totPris += o.kalkTotPris();
 	}
-	return pris;
+	return totPris;
 }
+
 public double getPris() {
 	
-	return pris;
+	return totPris;
 }
+
 public void setPris(double pris) {
-	this.pris = pris;
+	this.totPris = pris;
 }
+
 public String getBestallare() {
 	return bestallare;
 }
+
 public void setBestallare(String bestallare) {
 	this.bestallare = bestallare;
 }

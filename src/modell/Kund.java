@@ -5,15 +5,13 @@ import java.util.ArrayList;
 public class Kund {
 
 private String foretagsnamn;
-private String orgnr;
-private String mail;
+private String organisationsnummer;
+private String emailadress;
 private String kontaktperson;
-
-private String faktura;
-private String fakPostOrt;
-private String telenr;
-
-private ArrayList<Order> ordrar =new ArrayList<Order>();
+private String fakturaadress;
+private String fakturaadressPostOrt;
+private String telefonnummer;
+private ArrayList<Order> order =new ArrayList<Order>();
 
 public String getForetagsnamn() {
 	return foretagsnamn;
@@ -24,19 +22,19 @@ public void setForetagsnamn(String foretagsnamn) {
 }
 
 public String getOrgnr() {
-	return orgnr;
+	return organisationsnummer;
 }
 
 public void setOrgnr(String orgnr) {
-	this.orgnr = orgnr;
+	this.organisationsnummer = orgnr;
 }
 
 public String getMail() {
-	return mail;
+	return emailadress;
 }
 
 public void setMail(String mail) {
-	this.mail = mail;
+	this.emailadress = mail;
 }
 
 public String getKontaktperson() {
@@ -48,39 +46,39 @@ public void setKontaktperson(String kontaktperson) {
 }
 
 public String getFaktura() {
-	return faktura;
+	return fakturaadress;
 }
 
 public void setFaktura(String faktura) {
-	this.faktura = faktura;
+	this.fakturaadress = faktura;
 }
 
 public String getFakPostOrt() {
-	return fakPostOrt;
+	return fakturaadressPostOrt;
 }
 
 public void setFakPostOrt(String fakPostOrt) {
-	this.fakPostOrt = fakPostOrt;
+	this.fakturaadressPostOrt = fakPostOrt;
 }
 
 public String getTelenr() {
-	return telenr;
+	return telefonnummer;
 }
 
 public void setTelenr(String telenr) {
-	this.telenr = telenr;
+	this.telefonnummer = telenr;
 }
 
 public void addOrder(Order o){
-	ordrar.add(o);
+	order.add(o);
 }
 
 public ArrayList<Order> getOrdrar() {
-	return ordrar;
+	return order;
 }
 
 public void setOrdrar(ArrayList<Order> ordrar) {
-	this.ordrar = ordrar;
+	this.order = ordrar;
 }
 
 }
